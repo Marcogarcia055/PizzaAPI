@@ -8,7 +8,5 @@ namespace Pizzeria.Models
         public bool Activo { get; set; }
         public int? IdCorte { get; set; }
 
-        // Relación con detalles
-        public List<DetallePedido> Detalles { get; set; } = new List<DetallePedido>();
     }
 }
