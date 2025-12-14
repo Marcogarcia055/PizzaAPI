@@ -5,8 +5,8 @@ namespace Pizzeria.Service.Interface
 {
     public interface ICorteService
     {
-        Task<int> AddCorteAsync(CorteDto corte);
-        Task<IEnumerable<Corte>> GetAllCortesAsync();
+        Task<CorteResultDto> AddCorteAsync(CorteDto corte);
+        Task<IEnumerable<CorteGetAllDto>> GetAllCortesAsync();
         Task<Corte?> GetCorteByIdAsync(int id);
     }
 }

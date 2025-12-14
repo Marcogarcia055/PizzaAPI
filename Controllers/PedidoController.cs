@@ -44,8 +44,11 @@ namespace Pizzeria.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _pedidoService.DeletePedidoAsync(id);
-            if (!deleted) return NotFound();
+            var rowsAffected = await _pedidoService.DeletePedidoAsync(id);
+
+            if (rowsAffected == 0)
+                return NotFound(new { message = "Pedido no encontrado" });
+
             return Ok(new { message = "Pedido eliminado correctamente" });
         }
     }

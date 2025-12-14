@@ -9,7 +9,7 @@ namespace Pizzeria.Repositories
 {
     public class PedidoRepository : IPedidoRepository
     {
-        private readonly string _connectionString = string.Empty;
+        private readonly string _connectionString;
 
         public PedidoRepository(IConfiguration configuration)
         {
@@ -52,25 +52,35 @@ namespace Pizzeria.Repositories
             );
         }
 
-        public async Task<Pedido?> GetPedidoByIdAsync(int id)
+        public async Task<PedidoDto?> GetPedidoByIdAsync(int id)
         {
             using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryFirstOrDefaultAsync<Pedido>(
+
+            using var multi = await connection.QueryMultipleAsync(
                 "sp_GetByIdPedido",
                 new { IdPedido = id },
                 commandType: CommandType.StoredProcedure
             );
+
+            // Primer result set: pedido
+            var pedido = await multi.ReadFirstOrDefaultAsync<PedidoDto>();
+            if (pedido == null) return null;
+
+            // Segundo result set: detalles
+            var detalles = (await multi.ReadAsync<DetallePedidoDto>()).ToList();
+            pedido.Detalles = detalles;
+
+            return pedido;
         }
 
-        public async Task<bool> DeletePedidoAsync(int id)
+        public async Task<int> DeletePedidoAsync(int id)
         {
             using var connection = new SqlConnection(_connectionString);
-            var rows = await connection.ExecuteAsync(
+            return await connection.QuerySingleAsync<int>(
                 "sp_DeletePedido",
                 new { IdPedido = id },
                 commandType: CommandType.StoredProcedure
             );
-            return rows > 0;
         }
     }
 }

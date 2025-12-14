@@ -20,10 +20,10 @@ namespace Pizzeria.Service
         public Task<IEnumerable<Pedido>> GetAllPedidosAsync()
             => _pedidoRepository.GetAllPedidosAsync();
 
-        public Task<Pedido?> GetPedidoByIdAsync(int id)
+        public Task<PedidoDto?> GetPedidoByIdAsync(int id)
             => _pedidoRepository.GetPedidoByIdAsync(id);
 
-        public Task<bool> DeletePedidoAsync(int id)
+        public Task<int> DeletePedidoAsync(int id)
             => _pedidoRepository.DeletePedidoAsync(id);
     }
 }

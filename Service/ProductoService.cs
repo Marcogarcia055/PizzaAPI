@@ -23,10 +23,10 @@ namespace Pizzeria.Service
         public Task<Producto?> GetProductoByIdAsync(int id)
             => _productoRepository.GetProductoByIdAsync(id);
 
-        public Task<bool> UpdateProductoAsync(int id, ProductoDto producto)
+        public Task<int> UpdateProductoAsync(int id, ProductoDto producto)
             => _productoRepository.UpdateProductoAsync(id, producto);
 
-        public Task<bool> DeleteProductoAsync(int id)
+        public Task<int> DeleteProductoAsync(int id)
             => _productoRepository.DeleteProductoAsync(id);
     }
 }

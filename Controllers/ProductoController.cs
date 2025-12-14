@@ -15,7 +15,6 @@ namespace Pizzeria.Controllers
             _productoService = productoService;
         }
 
-        // GET: api/producto
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -23,7 +22,6 @@ namespace Pizzeria.Controllers
             return Ok(productos);
         }
 
-        // GET: api/producto/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -32,7 +30,6 @@ namespace Pizzeria.Controllers
             return Ok(producto);
         }
 
-        // POST: api/producto
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] ProductoDto productoDto)
         {
@@ -40,25 +37,26 @@ namespace Pizzeria.Controllers
             return CreatedAtAction(nameof(GetById), new { id }, productoDto);
         }
 
-        // PUT: api/producto/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ProductoDto productoDto)
         {
-            var updated = await _productoService.UpdateProductoAsync(id, productoDto);
+            var rowsAffected = await _productoService.UpdateProductoAsync(id, productoDto);
 
-            if (!updated)
-                return NotFound(); // si no se encontró el producto
+            if (rowsAffected == 0)
+                return NotFound(new { message = "Producto no encontrado" });
 
             return Ok(new { message = "Producto actualizado correctamente" });
         }
 
-        // DELETE: api/producto/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _productoService.DeleteProductoAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
+            var rowsAffected = await _productoService.DeleteProductoAsync(id);
+
+            if (rowsAffected == 0)
+                return NotFound(new { message = "Producto no encontrado" });
+
+            return Ok(new { message = "Producto eliminado correctamente" });
         }
     }
 }

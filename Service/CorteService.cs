@@ -14,10 +14,10 @@ namespace Pizzeria.Service
             _corteRepository = corteRepository;
         }
 
-        public Task<int> AddCorteAsync(CorteDto corte)
+        public Task<CorteResultDto> AddCorteAsync(CorteDto corte)
             => _corteRepository.AddCorteAsync(corte);
 
-        public Task<IEnumerable<Corte>> GetAllCortesAsync()
+        public Task<IEnumerable<CorteGetAllDto>> GetAllCortesAsync()
             => _corteRepository.GetAllCortesAsync();
 
         public Task<Corte?> GetCorteByIdAsync(int id)

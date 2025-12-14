@@ -16,20 +16,21 @@ namespace Pizzeria.Repositories
             _connectionString = configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
         }
 
-        public async Task<int> AddCorteAsync(CorteDto corte)
+        public async Task<CorteResultDto> AddCorteAsync(CorteDto corte)
         {
             using var connection = new SqlConnection(_connectionString);
-            return await connection.ExecuteScalarAsync<int>(
+
+            return await connection.QueryFirstOrDefaultAsync<CorteResultDto>(
                 "sp_AddCorte",
-                new { corte.TotalPedidos, corte.TotalVentas, corte.Observaciones },
+                new { corte.Observaciones },
                 commandType: CommandType.StoredProcedure
             );
         }
 
-        public async Task<IEnumerable<Corte>> GetAllCortesAsync()
+        public async Task<IEnumerable<CorteGetAllDto>> GetAllCortesAsync()
         {
             using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<Corte>(
+            return await connection.QueryAsync<CorteGetAllDto>(
                 "sp_GetAllCortes",
                 commandType: CommandType.StoredProcedure
             );
@@ -38,11 +39,19 @@ namespace Pizzeria.Repositories
         public async Task<Corte?> GetCorteByIdAsync(int id)
         {
             using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryFirstOrDefaultAsync<Corte>(
+            using (var multi = await connection.QueryMultipleAsync(
                 "sp_GetCorteById",
                 new { IdCorte = id },
-                commandType: CommandType.StoredProcedure
-            );
+                commandType: CommandType.StoredProcedure))
+            {
+                var corte = await multi.ReadFirstOrDefaultAsync<Corte>();
+                var pedidos = (await multi.ReadAsync<Pedido>()).ToList();
+
+                if (corte != null)
+                    corte.Pedidos = pedidos;
+
+                return corte;
+            }
         }
     }
 }

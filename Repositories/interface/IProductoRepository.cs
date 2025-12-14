@@ -8,7 +8,7 @@ namespace Pizzeria.Repositories.Interface
         Task<int> AddProductoAsync(ProductoDto producto);
         Task<IEnumerable<Producto>> GetAllProductosAsync();
         Task<Producto?> GetProductoByIdAsync(int id);
-        Task<bool> UpdateProductoAsync(int id, ProductoDto producto);
-        Task<bool> DeleteProductoAsync(int id);
+        Task<int> UpdateProductoAsync(int id, ProductoDto producto);
+        Task<int> DeleteProductoAsync(int id);
     }
 }

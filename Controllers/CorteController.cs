@@ -36,8 +36,14 @@ namespace Pizzeria.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CorteDto corteDto)
         {
-            var id = await _corteService.AddCorteAsync(corteDto);
-            return CreatedAtAction(nameof(GetById), new { id }, corteDto);
+            var result = await _corteService.AddCorteAsync(corteDto);
+
+            // Si no hay pedidos pendientes, devolvemos BadRequest con el mensaje
+            if (result.NuevoId == null)
+                return BadRequest(new { message = result.Mensaje });
+
+            // Si se creó el corte, devolvemos 201 con el objeto completo
+            return CreatedAtAction(nameof(GetById), new { id = result.NuevoId }, result);
         }
     }
 }
