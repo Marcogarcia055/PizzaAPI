@@ -73,3 +73,4 @@ C:\Users\diana\OneDrive\Escritorio\Practica\PizzaApi\obj\Debug\net10.0\refint\Pi
 C:\Users\diana\OneDrive\Escritorio\Practica\PizzaApi\obj\Debug\net10.0\PizzaApi.pdb
 C:\Users\diana\OneDrive\Escritorio\Practica\PizzaApi\obj\Debug\net10.0\PizzaApi.genruntimeconfig.cache
 C:\Users\diana\OneDrive\Escritorio\Practica\PizzaApi\obj\Debug\net10.0\ref\PizzaApi.dll
+C:\Users\diana\OneDrive\Escritorio\Practica\PizzaApi\bin\Debug\net10.0\PizzaApi.staticwebassets.runtime.json

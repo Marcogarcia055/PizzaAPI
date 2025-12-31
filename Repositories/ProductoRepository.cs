@@ -21,7 +21,7 @@ namespace Pizzeria.Repositories
             using var connection = new SqlConnection(_connectionString);
             return await connection.ExecuteScalarAsync<int>(
                 "sp_AddProducto",
-                new { producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion },
+                new { producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion, producto.Categoria },
                 commandType: CommandType.StoredProcedure
             );
         }
@@ -50,7 +50,7 @@ namespace Pizzeria.Repositories
             using var connection = new SqlConnection(_connectionString);
             return await connection.QuerySingleAsync<int>(
                 "sp_UpdateProducto",
-                new { IdProducto = id, producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion },
+                new { IdProducto = id, producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion, producto.Categoria },
                 commandType: CommandType.StoredProcedure
             );
         }

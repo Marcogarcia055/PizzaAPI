@@ -7,6 +7,7 @@ namespace Pizzeria.Models
         public decimal Precio { get; set; }
         public bool Activo { get; set; }
         public string? Imagen { get; set; }
-        public string? Descripcion { get; set; }   // Nueva propiedad
+        public string? Descripcion { get; set; }
+        public string? Categoria { get; set; }   // 🔹 Nueva propiedad
     }
 }

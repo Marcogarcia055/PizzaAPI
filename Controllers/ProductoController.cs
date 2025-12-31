@@ -9,10 +9,12 @@ namespace Pizzeria.Controllers
     public class ProductoController : ControllerBase
     {
         private readonly IProductoService _productoService;
+        private readonly IImageService _imageService;
 
-        public ProductoController(IProductoService productoService)
+        public ProductoController(IProductoService productoService, IImageService imageService)
         {
             _productoService = productoService;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -30,9 +32,35 @@ namespace Pizzeria.Controllers
             return Ok(producto);
         }
 
+        // 🔹 Endpoint para subir imagen
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest(new { message = "No se recibió ninguna imagen" });
+
+            try
+            {
+                var url = await _imageService.SaveImageAsync(file);
+                return Ok(new { url });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] ProductoDto productoDto)
         {
+            // Si la imagen empieza con "/uploads", conviértela en URL completa
+            if (!string.IsNullOrEmpty(productoDto.Imagen) && productoDto.Imagen.StartsWith("/uploads"))
+            {
+                var request = HttpContext.Request;
+                var baseUrl = $"{request.Scheme}://{request.Host}";
+                productoDto.Imagen = $"{baseUrl}{productoDto.Imagen}";
+            }
+
             var id = await _productoService.AddProductoAsync(productoDto);
             return CreatedAtAction(nameof(GetById), new { id }, productoDto);
         }
